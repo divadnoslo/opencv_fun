@@ -38,6 +38,9 @@ while cv2.waitKey(1) != 27: # Escape
     # flip the image for normal view
     frame = cv2.flip(frame, 1)
     
+    # Make Copy of Frame
+    overlay = frame.copy()
+    
     # Logic for moving target
     step = 10; # pixels
     # Move Target Up
@@ -58,15 +61,17 @@ while cv2.waitKey(1) != 27: # Escape
             target[0] = target[0] + step;
     
     # add rectangle target to image
-    size = 5;
-    frame = cv2.rectangle(frame, \
-                          (target[0] - size, target[1] - size), \
-                          (target[0] + size, target[1] + size), \
-                          (255, 0, 0), \
-                           2)
+    size = 20;
+    cv2.rectangle(overlay, \
+                 (target[0] - size, target[1] - size), \
+                 (target[0] + size, target[1] + size), \
+                 (255, 0, 255), \
+                  2)
     
     # show the final image without target
-    cv2.imshow(win_name, frame)
+    alpha = 0.35;
+    new_frame = cv2.addWeighted(overlay, alpha, frame, 1 - alpha, 0)
+    cv2.imshow(win_name, new_frame)
 
 
 source.release()
